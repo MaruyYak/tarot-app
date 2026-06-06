@@ -10,6 +10,7 @@ import { ReadingDetailScreen } from '@/screens/ReadingDetailScreen'
 import { ProfileScreen } from '@/screens/ProfileScreen'
 import { DailyScreen } from '@/screens/DailyScreen'
 import { useProfileStore } from '@/store/profileStore'
+import { useHistoryStore } from '@/store/historyStore'
 
 const router = createBrowserRouter([
   { path: '/', element: <HomeScreen /> },
@@ -25,10 +26,15 @@ const router = createBrowserRouter([
 
 export default function App() {
   const theme = useProfileStore((s) => s.theme)
+  const loadReadings = useHistoryStore((s) => s.loadReadings)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
+
+  useEffect(() => {
+    loadReadings()
+  }, [])
 
   return <RouterProvider router={router} />
 }
