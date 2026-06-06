@@ -6,10 +6,22 @@ interface InterpretRequest {
   cards: DrawnCard[]
 }
 
+function getUserId(): string {
+  let id = localStorage.getItem('tarot-user-id')
+  if (!id) {
+    id = crypto.randomUUID()
+    localStorage.setItem('tarot-user-id', id)
+  }
+  return id
+}
+
 export async function getInterpretation(req: InterpretRequest): Promise<string> {
   const res = await fetch('/api/interpret', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-user-id': getUserId(),
+    },
     body: JSON.stringify(req),
   })
 

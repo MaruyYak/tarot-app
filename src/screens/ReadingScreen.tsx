@@ -100,11 +100,23 @@ export function ReadingScreen() {
 
           {error && (
             <div className="flex flex-col items-center gap-3 py-8 animate-fade-in">
-              <AlertCircle size={32} className="text-red-400" />
-              <p className="text-slate-400 text-sm text-center">{error}</p>
-              <Button variant="secondary" size="sm" onClick={fetchInterpretation}>
-                Попробовать снова
-              </Button>
+              {error.includes('лимит') ? (
+                <>
+                  <span className="text-5xl">✦</span>
+                  <p className="text-slate-200 text-base text-center font-display">Лимит раскладов исчерпан</p>
+                  <p className="text-slate-500 text-xs text-center max-w-[260px] leading-relaxed">
+                    Доступно 20 бесплатных трактовок. Обратитесь к владельцу приложения для продолжения.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <AlertCircle size={32} className="text-red-400" />
+                  <p className="text-slate-400 text-sm text-center">{error}</p>
+                  <Button variant="secondary" size="sm" onClick={fetchInterpretation}>
+                    Попробовать снова
+                  </Button>
+                </>
+              )}
             </div>
           )}
 
