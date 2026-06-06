@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/Button'
 import { TarotCard } from '@/components/cards/TarotCard'
 import { useReadingStore } from '@/store/readingStore'
 import { useHistoryStore } from '@/store/historyStore'
-import { nanoid } from '@/lib/utils'
+import { nanoid, parseInterpretation } from '@/lib/utils'
+import { InterpretationView } from '@/components/InterpretationView'
 
 export function ReadingScreen() {
   const navigate = useNavigate()
@@ -123,13 +124,14 @@ export function ReadingScreen() {
           {interpretation && (
             <div className="animate-fade-in">
               <div className="h-px bg-gradient-to-r from-transparent via-mystic/30 to-transparent mb-5" />
-              <div className="prose prose-sm prose-invert max-w-none">
-                {interpretation.split('\n').filter(Boolean).map((para, i) => (
-                  <p key={i} className="text-slate-300 text-sm leading-relaxed mb-3 last:mb-0">
-                    {para}
-                  </p>
-                ))}
-              </div>
+              {(() => {
+                const parsed = parseInterpretation(interpretation)
+                return parsed
+                  ? <InterpretationView data={parsed} />
+                  : interpretation.split('\n').filter(Boolean).map((para, i) => (
+                      <p key={i} className="text-slate-300 text-sm leading-relaxed mb-3 last:mb-0">{para}</p>
+                    ))
+              })()}
             </div>
           )}
         </div>

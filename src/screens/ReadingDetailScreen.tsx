@@ -2,9 +2,10 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { TarotCard } from '@/components/cards/TarotCard'
 import { useHistoryStore } from '@/store/historyStore'
-import { formatDate } from '@/lib/utils'
+import { formatDate, parseInterpretation } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Trash2 } from 'lucide-react'
+import { InterpretationView } from '@/components/InterpretationView'
 
 export function ReadingDetailScreen() {
   const { id } = useParams<{ id: string }>()
@@ -65,13 +66,16 @@ export function ReadingDetailScreen() {
         <div className="h-px bg-gradient-to-r from-transparent via-mystic/30 to-transparent" />
 
         {/* Interpretation */}
-        <div className="flex flex-col gap-3">
-          {reading.interpretation.split('\n').filter(Boolean).map((para, i) => (
-            <p key={i} className="text-slate-300 text-sm leading-relaxed">
-              {para}
-            </p>
-          ))}
-        </div>
+        {(() => {
+          const parsed = parseInterpretation(reading.interpretation)
+          return parsed
+            ? <InterpretationView data={parsed} />
+            : <div className="flex flex-col gap-3">
+                {reading.interpretation.split('\n').filter(Boolean).map((para, i) => (
+                  <p key={i} className="text-slate-300 text-sm leading-relaxed">{para}</p>
+                ))}
+              </div>
+        })()}
 
         <Button variant="secondary" fullWidth onClick={() => navigate('/')}>
           Новый расклад

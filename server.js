@@ -36,63 +36,38 @@ app.post('/api/interpret', async (req, res) => {
     )
     .join('\n\n')
 
-  const systemPrompt = `Ты — подруга, которая умеет читать таро. Отвечаешь на "ты", коротко, без воды. Максимум 3-4 предложения на всё.`
-
-  const userPrompt = `Вопрос: «${question}»
-Карты: ${cardsText}
-
-Скажи главное что видишь в картах — 3-4 предложения, как другу. Без списков, без заголовков.`
+  const systemPrompt = `Ты — таролог-друг. Отвечаешь по-русски, на "ты", живым языком без жаргона.
+Верни ТОЛЬКО валидный JSON со следующими полями:
+{
+  "keywords": ["3-5 ключевых слова для всего расклада"],
+  "short": "Краткий ответ на вопрос — 2-3 предложения как другу",
+  "long": "Развёрнутый ответ — 4-5 предложений с нюансами и деталями",
+  "upright": "Что говорят прямые карты в этом раскладе",
+  "reversed": "Что означают перевёрнутые карты в контексте вопроса (если все прямые — напиши об энергии расклада)",
+  "love": "Как этот расклад отвечает в сфере любви и отношений",
+  "career": "Как этот расклад отвечает в сфере карьеры и работы",
+  "finance": "Как этот расклад отвечает в сфере финансов и денег"
+}`
 
   try {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
-      max_tokens: 300,
+      max_tokens: 900,
+      response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
+        { role: 'user', content: `Расклад: ${spreadName}\nВопрос: «${question}»\nКарты:\n${cardsText}` },
       ],
     })
 
-    const text = completion.choices[0]?.message?.content ?? ''
-    res.json({ interpretation: text })
+    const interpretation = JSON.parse(completion.choices[0]?.message?.content ?? '{}')
+    res.json({ interpretation })
   } catch (err) {
     console.error('OpenAI API error:', err)
     res.status(500).json({ error: 'Не удалось получить трактовку. Проверьте API-ключ.' })
   }
 })
 
-const PROMPT_AREAS = [
-  'любовь и отношения', 'карьера и деньги', 'здоровье и энергия',
-  'семья', 'дружба', 'творчество', 'личностный рост', 'перемены в жизни',
-  'страхи и сомнения', 'мечты и цели', 'интуиция и духовность', 'финансы',
-  'самооценка', 'прошлое и будущее', 'работа', 'переезд или путешествие',
-]
-
-app.get('/api/prompts', async (_req, res) => {
-  const areas = [...PROMPT_AREAS].sort(() => Math.random() - 0.5).slice(0, 4).join(', ')
-  try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      max_tokens: 120,
-      messages: [
-        {
-          role: 'system',
-          content: 'Ты генерируешь короткие вопросы для расклада таро. Каждый вопрос — одно предложение, 4-7 слов, на русском. Отвечай ТОЛЬКО JSON-массивом из 4 строк, без пояснений.',
-        },
-        {
-          role: 'user',
-          content: `Придумай по одному вопросу для каждой темы: ${areas}. Вопросы должны быть личными (от первого лица), короткими и разными по смыслу.`,
-        },
-      ],
-    })
-    const text = completion.choices[0].message.content.trim()
-    const prompts = JSON.parse(text.replace(/```json|```/g, '').trim())
-    res.json({ prompts })
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ error: err.message })
-  }
-})
 
 // SPA fallback — все неизвестные маршруты отдают index.html
 if (isProd) {

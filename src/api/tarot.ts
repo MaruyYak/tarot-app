@@ -31,5 +31,8 @@ export async function getInterpretation(req: InterpretRequest): Promise<string> 
     throw new Error(data.error ?? 'Ошибка сервера')
   }
 
-  return data.interpretation as string
+  // Сериализуем объект в строку — тип interpretation в store/DB остаётся string
+  return typeof data.interpretation === 'object'
+    ? JSON.stringify(data.interpretation)
+    : (data.interpretation as string)
 }
