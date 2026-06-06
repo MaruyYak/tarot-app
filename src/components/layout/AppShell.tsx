@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Home } from 'lucide-react'
 import { BottomNav } from './BottomNav'
 
 interface AppShellProps {
@@ -41,6 +41,14 @@ export function AppShell({
             </h1>
           )}
           {headerRight && <div className="ml-auto">{headerRight}</div>}
+          {showBack && (
+            <button
+              onClick={() => navigate('/')}
+              className="flex items-center justify-center w-9 h-9 rounded-full bg-elevated border border-border text-slate-400 hover:text-white transition-colors shrink-0 ml-auto"
+            >
+              <Home size={16} />
+            </button>
+          )}
         </header>
       )}
 

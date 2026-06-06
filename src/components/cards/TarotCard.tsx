@@ -13,10 +13,10 @@ interface TarotCardProps {
 }
 
 const SIZES = {
-  sm: { card: 'w-16 h-[7rem]',         symbol: 'text-2xl', name: 'text-[9px]' },
-  md: { card: 'w-24 h-36',             symbol: 'text-4xl', name: 'text-[10px]' },
-  lg: { card: 'w-[8.3rem] h-[14rem]',  symbol: 'text-5xl', name: 'text-xs' },
-  xl: { card: 'w-[11rem] h-[18.5rem]', symbol: 'text-6xl', name: 'text-sm' },
+  sm: { card: 'w-[5.8rem] h-[9.8rem]',  symbol: 'text-2xl', name: 'text-[8px]' },
+  md: { card: 'w-24 h-36',              symbol: 'text-4xl', name: 'text-[10px]' },
+  lg: { card: 'w-[10rem] h-[16.5rem]',  symbol: 'text-5xl', name: 'text-xs' },
+  xl: { card: 'w-[11rem] h-[18.5rem]',  symbol: 'text-6xl', name: 'text-sm' },
 }
 
 export function TarotCard({

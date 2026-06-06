@@ -95,7 +95,7 @@ export function ProfileScreen() {
             <DeckOption
               isActive={deckId === null}
               onSelect={() => setDeckId(null)}
-              label="CSS"
+              label="Emoji"
               sublabel="По умолчанию"
             >
               <div

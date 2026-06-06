@@ -61,6 +61,39 @@ app.post('/api/interpret', async (req, res) => {
   }
 })
 
+const PROMPT_AREAS = [
+  'любовь и отношения', 'карьера и деньги', 'здоровье и энергия',
+  'семья', 'дружба', 'творчество', 'личностный рост', 'перемены в жизни',
+  'страхи и сомнения', 'мечты и цели', 'интуиция и духовность', 'финансы',
+  'самооценка', 'прошлое и будущее', 'работа', 'переезд или путешествие',
+]
+
+app.get('/api/prompts', async (_req, res) => {
+  const areas = [...PROMPT_AREAS].sort(() => Math.random() - 0.5).slice(0, 4).join(', ')
+  try {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      max_tokens: 120,
+      messages: [
+        {
+          role: 'system',
+          content: 'Ты генерируешь короткие вопросы для расклада таро. Каждый вопрос — одно предложение, 4-7 слов, на русском. Отвечай ТОЛЬКО JSON-массивом из 4 строк, без пояснений.',
+        },
+        {
+          role: 'user',
+          content: `Придумай по одному вопросу для каждой темы: ${areas}. Вопросы должны быть личными (от первого лица), короткими и разными по смыслу.`,
+        },
+      ],
+    })
+    const text = completion.choices[0].message.content.trim()
+    const prompts = JSON.parse(text.replace(/```json|```/g, '').trim())
+    res.json({ prompts })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // SPA fallback — все неизвестные маршруты отдают index.html
 if (isProd) {
   app.get('*', (_req, res) => {

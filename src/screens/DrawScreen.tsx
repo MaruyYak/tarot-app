@@ -60,8 +60,11 @@ export function DrawScreen() {
         {/* Cards grid */}
         <div
           className={[
-            'flex flex-wrap justify-center gap-4',
-            dealt.length === 1 ? 'items-center flex-1' : 'items-start',
+            dealt.length === 1
+              ? 'flex items-center justify-center flex-1'
+              : dealt.length > 3
+              ? 'grid grid-cols-3 gap-3 w-full'
+              : 'flex flex-wrap justify-center gap-4 items-start',
           ].join(' ')}
         >
           {dealt.map((dc, i) => (
@@ -71,7 +74,7 @@ export function DrawScreen() {
                 isRevealed={i < revealedCount}
                 isReversed={dc.isReversed}
                 onClick={i === revealedCount ? revealNext : undefined}
-                size={dealt.length === 1 ? 'xl' : dealt.length <= 3 ? 'lg' : dealt.length <= 5 ? 'md' : 'sm'}
+                size={dealt.length === 1 ? 'xl' : dealt.length <= 3 ? 'lg' : 'sm'}
                 showLabel={false}
               />
               <div className="text-center">

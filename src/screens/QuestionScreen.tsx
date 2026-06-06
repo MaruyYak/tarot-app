@@ -1,39 +1,42 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { RefreshCw } from 'lucide-react'
 import { AppShell } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/Button'
 import { useReadingStore } from '@/store/readingStore'
 
-const ALL_PROMPTS = [
+const FALLBACK_PROMPTS = [
   'Что меня ждёт в любви?',
   'Как развивается моя карьера?',
   'Что мне нужно отпустить?',
   'Куда двигаться дальше?',
-  'Что сейчас мешает мне двигаться вперёд?',
-  'На что стоит обратить внимание прямо сейчас?',
-  'Что думают обо мне окружающие?',
-  'Правильное ли решение я принимаю?',
-  'Чего мне не хватает для счастья?',
-  'Что ждёт меня в ближайший месяц?',
-  'Как улучшить отношения с близким человеком?',
-  'Стоит ли мне менять работу?',
-  'Что скрыто от меня в этой ситуации?',
-  'Как найти баланс между работой и личной жизнью?',
-  'Что мне поможет в достижении цели?',
-  'Какой урок я сейчас прохожу?',
-  'Что мне принесёт этот год?',
-  'Как справиться с тем, что меня тревожит?',
 ]
-
-function pickRandom(arr: string[], n: number): string[] {
-  return [...arr].sort(() => Math.random() - 0.5).slice(0, n)
-}
 
 export function QuestionScreen() {
   const navigate = useNavigate()
   const { question, setQuestion } = useReadingStore()
   const [localQ, setLocalQ] = useState(question)
-  const [prompts] = useState(() => pickRandom(ALL_PROMPTS, 4))
+  const [prompts, setPrompts] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
+
+  const fetchPrompts = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/prompts')
+      const data = await res.json()
+      if (Array.isArray(data.prompts) && data.prompts.length > 0) {
+        setPrompts(data.prompts)
+      } else {
+        setPrompts(FALLBACK_PROMPTS)
+      }
+    } catch {
+      setPrompts(FALLBACK_PROMPTS)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => { fetchPrompts() }, [fetchPrompts])
 
   function handleNext() {
     setQuestion(localQ.trim())
@@ -61,22 +64,37 @@ export function QuestionScreen() {
 
         {/* Quick prompts */}
         <div>
-          <p className="text-slate-500 text-xs uppercase tracking-widest mb-3">Или выберите тему</p>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-slate-500 text-xs uppercase tracking-widest">Или выберите тему</p>
+            <button
+              onClick={fetchPrompts}
+              disabled={loading}
+              className="flex items-center gap-1 text-slate-500 hover:text-slate-300 transition-colors disabled:opacity-40"
+            >
+              <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
+              <span className="text-[10px]">обновить</span>
+            </button>
+          </div>
+
           <div className="grid grid-cols-2 gap-2">
-            {prompts.map((p) => (
-              <button
-                key={p}
-                onClick={() => setLocalQ(p)}
-                className={[
-                  'text-left text-sm px-3 py-2.5 rounded-xl border transition-all duration-150',
-                  localQ === p
-                    ? 'border-mystic/60 bg-mystic/10 text-mystic-light'
-                    : 'border-border bg-surface text-slate-400 hover:border-mystic/30',
-                ].join(' ')}
-              >
-                {p}
-              </button>
-            ))}
+            {loading
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="h-10 rounded-xl bg-surface border border-border animate-pulse" />
+                ))
+              : prompts.map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => setLocalQ(p)}
+                    className={[
+                      'text-left text-sm px-3 py-2.5 rounded-xl border transition-all duration-150',
+                      localQ === p
+                        ? 'border-mystic/60 bg-mystic/10 text-mystic-light'
+                        : 'border-border bg-surface text-slate-400 hover:border-mystic/30',
+                    ].join(' ')}
+                  >
+                    {p}
+                  </button>
+                ))}
           </div>
         </div>
 
