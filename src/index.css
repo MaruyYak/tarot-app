@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Theme: Void (default) ──────────────────────────────────────── */
+:root,
+[data-theme="void"] {
+  --color-void:         10 10 15;
+  --color-surface:      18 18 30;
+  --color-elevated:     26 26 46;
+  --color-border:       37 37 69;
+  --color-accent:       139 92 246;
+  --color-accent-light: 167 139 250;
+  --color-accent-dark:  109 40 217;
+  --color-gold:         245 158 11;
+  --color-gold-light:   252 211 77;
+  --color-gold-dark:    217 119 6;
+  --bg-app: radial-gradient(ellipse at 50% 0%, #1a0a2e 0%, #0a0a0f 65%);
+  --card-back-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  --card-back-border: rgba(139, 92, 246, 0.3);
+  --card-back-symbol-color: rgba(167, 139, 250, 0.6);
+  --card-back-text-color: rgba(167, 139, 250, 0.5);
+  --card-back-inner-border: rgba(139, 92, 246, 0.2);
+  --card-back-inner2-border: rgba(245, 158, 11, 0.1);
+}
+
+/* ── Theme: Nouveau ─────────────────────────────────────────────── */
+[data-theme="nouveau"] {
+  --color-void:         15 11 14;
+  --color-surface:      30 22 32;
+  --color-elevated:     40 30 36;
+  --color-border:       107 90 66;
+  --color-accent:       196 118 138;
+  --color-accent-light: 216 150 168;
+  --color-accent-dark:  160 88 108;
+  --color-gold:         201 160 96;
+  --color-gold-light:   224 196 140;
+  --color-gold-dark:    158 118 60;
+  --bg-app: radial-gradient(ellipse at 50% 0%, #2a1520 0%, #0f0b0e 65%);
+  --card-back-bg: linear-gradient(160deg, #1e1620 0%, #261820 50%, #1a1015 100%);
+  --card-back-border: rgba(180, 148, 90, 0.45);
+  --card-back-symbol-color: rgba(201, 160, 96, 0.7);
+  --card-back-text-color: rgba(196, 118, 138, 0.55);
+  --card-back-inner-border: rgba(180, 148, 90, 0.25);
+  --card-back-inner2-border: rgba(196, 118, 138, 0.15);
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background-color: rgb(var(--color-void));
+    color: #e2e8f0;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    background-color: rgb(var(--color-void));
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 4px;
+  }
+
+  /* Safe area padding for bottom nav */
+  .pb-safe {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+}
+
+@layer utilities {
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
