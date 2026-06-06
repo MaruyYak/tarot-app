@@ -82,7 +82,7 @@ export function ProfileScreen() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-3">
-          <Stat label="Раскладов сделано" value={String(readings.length)} />
+          <Stat label="Раскладов сделано" value={`${readings.length}/20`} />
           <Stat label="Любимый расклад" value={favoriteSpread ?? '—'} small />
         </div>
 
