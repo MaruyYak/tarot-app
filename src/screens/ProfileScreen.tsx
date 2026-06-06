@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Check, Pencil } from 'lucide-react'
 import { AppShell } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/Button'
@@ -22,12 +22,26 @@ const THEMES: { id: AppTheme; label: string; description: string; swatches: stri
   },
 ]
 
+function getUserId(): string {
+  let id = localStorage.getItem('tarot-user-id')
+  if (!id) { id = crypto.randomUUID(); localStorage.setItem('tarot-user-id', id) }
+  return id
+}
+
 export function ProfileScreen() {
   const readings = useHistoryStore((s) => s.readings)
   const clearAll = useHistoryStore((s) => s.clearAll)
   const { name, joinedAt, theme, deckId, setName, setTheme, setDeckId } = useProfileStore()
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(name)
+  const [interpretCount, setInterpretCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetch('/api/usage', { headers: { 'x-user-id': getUserId() } })
+      .then((r) => r.json())
+      .then((d) => setInterpretCount(d.count ?? null))
+      .catch(() => {})
+  }, [])
 
   function saveEdit() {
     setName(draft.trim() || 'Странник')
@@ -82,7 +96,7 @@ export function ProfileScreen() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-3">
-          <Stat label="Раскладов сделано" value={`${readings.length}/20`} />
+          <Stat label="Трактовок получено" value={interpretCount !== null ? `${interpretCount}/20` : `${readings.length}/20`} />
           <Stat label="Любимый расклад" value={favoriteSpread ?? '—'} small />
         </div>
 
