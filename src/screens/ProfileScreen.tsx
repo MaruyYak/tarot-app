@@ -20,6 +20,12 @@ const THEMES: { id: AppTheme; label: string; description: string; swatches: stri
     description: 'Тёплый, золотой',
     swatches: ['#c4768a', '#1e1620', '#c9a060'],
   },
+  {
+    id: 'emerald',
+    label: 'Изумруд',
+    description: 'Лесной, природный',
+    swatches: ['#125846', '#082E28', '#c9a84c'],
+  },
 ]
 
 function getUserId(): string {

@@ -24,6 +24,27 @@
   --card-back-inner2-border: rgba(245, 158, 11, 0.1);
 }
 
+/* ── Theme: Emerald ─────────────────────────────────────────────── */
+[data-theme="emerald"] {
+  --color-void:         1 17 14;      /* #01110E */
+  --color-surface:      8 46 40;      /* #082E28 */
+  --color-elevated:     11 55 47;     /* #0B372F */
+  --color-border:       14 62 50;
+  --color-accent:       18 88 70;
+  --color-accent-light: 25 112 89;
+  --color-accent-dark:  12 62 50;
+  --color-gold:         201 168 76;
+  --color-gold-light:   228 200 118;
+  --color-gold-dark:    158 122 40;
+  --bg-app: radial-gradient(ellipse at 50% 0%, #0B372F 0%, rgba(1, 17, 14, 0.95) 70%);
+  --card-back-bg: linear-gradient(135deg, #061F1B 0%, #082E28 50%, #0B372F 100%);
+  --card-back-border: rgba(26, 108, 86, 0.3);
+  --card-back-symbol-color: rgba(201, 168, 76, 0.7);
+  --card-back-text-color: rgba(36, 138, 110, 0.5);
+  --card-back-inner-border: rgba(18, 80, 65, 0.4);
+  --card-back-inner2-border: rgba(201, 168, 76, 0.15);
+}
+
 /* ── Theme: Nouveau ─────────────────────────────────────────────── */
 [data-theme="nouveau"] {
   --color-void:         15 11 14;
@@ -82,6 +103,32 @@
   .pb-safe {
     padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
   }
+}
+
+/* ── Emerald: lighten muted text for readability on dark green ───── */
+[data-theme="emerald"] .text-slate-600 { color: rgb(115 155 148); }
+[data-theme="emerald"] .text-slate-500 { color: rgb(148 185 178); }
+[data-theme="emerald"] .text-slate-400 { color: rgb(185 212 206); }
+[data-theme="emerald"] .text-slate-300 { color: rgb(210 228 224); }
+
+/* Tarot button pulse — uses theme CSS vars so it works across all themes */
+@keyframes tarotButtonGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 12px rgba(var(--color-accent), 0.2),
+      0 0 30px rgba(var(--color-accent), 0.05),
+      inset 0 1px 0 rgba(var(--color-gold-light), 0.08);
+  }
+  50% {
+    box-shadow:
+      0 0 28px rgba(var(--color-accent), 0.5),
+      0 0 60px rgba(var(--color-accent), 0.18),
+      inset 0 1px 0 rgba(var(--color-gold-light), 0.15);
+  }
+}
+
+.tarot-btn-body {
+  animation: tarotButtonGlow 3s ease-in-out infinite;
 }
 
 @layer utilities {

@@ -82,7 +82,7 @@ export function DailyScreen() {
                 onClick={() => handleSelectType(t)}
                 className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-mystic/40 hover:bg-mystic/5 transition-all duration-200 text-left"
               >
-                <span className="text-2xl w-8 text-center shrink-0" style={{ color: 'rgb(var(--color-accent))' }}>
+                <span className="text-2xl w-8 text-center shrink-0" style={{ color: 'rgb(var(--color-gold))' }}>
                   {t.icon}
                 </span>
                 <div>

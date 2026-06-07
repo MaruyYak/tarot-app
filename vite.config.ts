@@ -10,7 +10,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Таро — AI таролог',
+        name: 'Твой личный таролог',
         short_name: 'Таро',
         description: 'Персональный AI таролог в твоём кармане',
         theme_color: '#0a0a0f',

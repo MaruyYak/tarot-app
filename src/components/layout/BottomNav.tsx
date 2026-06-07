@@ -13,9 +13,9 @@ export function BottomNav() {
     <nav
       className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px]"
       style={{
-        background: 'rgb(var(--color-surface) / 0.95)',
+        background: 'rgb(var(--color-void) / 0.97)',
         backdropFilter: 'blur(20px)',
-        borderTop: '1px solid rgba(37,37,69,0.8)',
+        borderTop: '1px solid rgb(var(--color-border) / 0.5)',
       }}
     >
       <div className="flex items-center justify-around px-2 py-2 pb-safe">
@@ -38,7 +38,7 @@ export function BottomNav() {
                 <Icon
                   size={22}
                   strokeWidth={isActive ? 2 : 1.5}
-                  className={isActive ? 'drop-shadow-[0_0_8px_rgba(167,139,250,0.8)]' : ''}
+                  style={isActive ? { filter: 'drop-shadow(0 0 7px rgb(var(--color-accent-light) / 0.75))' } : {}}
                 />
                 <span className="text-[10px] font-medium tracking-wide">{label}</span>
               </>

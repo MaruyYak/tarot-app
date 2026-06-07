@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { DeckId } from '@/data/decks'
 
-export type AppTheme = 'void' | 'nouveau'
+export type AppTheme = 'void' | 'nouveau' | 'emerald'
 
 interface ProfileStore {
   name: string
