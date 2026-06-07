@@ -91,7 +91,7 @@ const DECKS: DeckConfig[] = [
       'pentacles-5':  'Five_of_Pentacles_gold.jpg',
       'pentacles-6':  'Six_of_Pentacles_gold.png',
       'pentacles-7':  'Seven_of_Pentacles_gold.jpg',
-      'pentacles-8':  'Eight_of_Pentacles_gold.jpg',
+      'pentacles-8':  'Eight_of_Pentacles_gold.png',
       'pentacles-9':  'Nine_of_Pentacles_gold.jpg',
       'pentacles-10': 'Ten_of_Pentacles_gold.jpg',
       'pentacles-11': 'Page_of_Pentacles_gold.png',

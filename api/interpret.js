@@ -1,5 +1,12 @@
 import OpenAI from 'openai'
 import { createClient } from '@libsql/client'
+import { createRequire } from 'module'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
+
+const require = createRequire(import.meta.url)
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const cardKnowledge = require(join(__dirname, '..', 'src', 'data', 'cardKnowledge.json'))
 
 const FREE_LIMIT = 20
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
@@ -40,18 +47,25 @@ export default async function handler(req, res) {
   }
 
   const cardList = cards
-    .map((c) => `${c.card.nameRu}${c.isReversed ? ' (перевёрнутая)' : ''} — позиция: ${c.position.nameRu}`)
-    .join('\n')
+    .map((c) => {
+      const k = cardKnowledge[c.card.id]
+      const knowledgeBlock = k
+        ? `  Суть: ${k.essence}\n  Прямая: ${k.upright}\n  Перевёрнутая: ${k.reversed}`
+        : ''
+      return `Позиция «${c.position.nameRu}»: ${c.card.nameRu}${c.isReversed ? ' (перевёрнутая)' : ''}\n${knowledgeBlock}`
+    })
+    .join('\n\n')
 
   try {
     const completion = await client.chat.completions.create({
       model: 'gpt-4o',
-      max_tokens: 900,
+      max_tokens: 1400,
       response_format: { type: 'json_object' },
       messages: [
         {
           role: 'system',
-          content: `Ты — таролог-друг. Отвечаешь по-русски, на "ты", живым языком без жаргона.
+          content: `Ты — профессиональный таролог. Отвечаешь по-русски, на "ты", живым языком без жаргона.
+Для каждой карты тебе дана её суть и классические значения из книг — используй эти знания как основу трактовки, но формулируй своими словами, применяя к конкретному вопросу.
 Верни ТОЛЬКО валидный JSON со следующими полями:
 {
   "keywords": ["3-5 ключевых слова для всего расклада"],
@@ -61,12 +75,16 @@ export default async function handler(req, res) {
   "reversed": "Что означают перевёрнутые карты в контексте вопроса (если все прямые — напиши об энергии расклада)",
   "love": "Как этот расклад отвечает в сфере любви и отношений",
   "career": "Как этот расклад отвечает в сфере карьеры и работы",
-  "finance": "Как этот расклад отвечает в сфере финансов и денег"
-}`,
+  "finance": "Как этот расклад отвечает в сфере финансов и денег",
+  "positions": [
+    { "position": "название позиции из расклада", "card": "название карты", "meaning": "1-2 предложения: что именно эта карта говорит в этой позиции для данного вопроса" }
+  ]
+}
+Массив positions должен содержать ровно по одному объекту для каждой карты в раскладе, в том же порядке.`,
         },
         {
           role: 'user',
-          content: `Расклад: ${spreadName}\nВопрос: ${question}\nКарты:\n${cardList}`,
+          content: `Расклад: ${spreadName}\nВопрос: «${question}»\n\nКарты:\n${cardList}`,
         },
       ],
     })

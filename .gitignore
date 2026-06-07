@@ -3,3 +3,7 @@ dist
 .env
 .env.local
 *.log
+books/
+*.png
+*.jpg
+screenshot-*.mjs

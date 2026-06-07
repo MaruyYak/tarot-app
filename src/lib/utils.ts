@@ -7,6 +7,12 @@ export function formatDate(iso: string): string {
   return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
+export interface CardPosition {
+  position: string
+  card: string
+  meaning: string
+}
+
 export interface InterpretationData {
   keywords: string[]
   short: string
@@ -16,6 +22,7 @@ export interface InterpretationData {
   love: string
   career: string
   finance: string
+  positions?: CardPosition[]
 }
 
 export function parseInterpretation(raw: string): InterpretationData | null {

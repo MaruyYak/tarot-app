@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import type { InterpretationData } from '@/lib/utils'
 
-const TABS = [
-  { id: 'short',  label: 'Кратко'    },
-  { id: 'detail', label: 'Подробно'  },
-  { id: 'spheres',label: 'Сферы'     },
+const BASE_TABS = [
+  { id: 'short',   label: 'Кратко'   },
+  { id: 'detail',  label: 'Подробно' },
+  { id: 'cards',   label: 'Карты'    },
+  { id: 'spheres', label: 'Сферы'    },
 ] as const
 
-type TabId = typeof TABS[number]['id']
+type TabId = typeof BASE_TABS[number]['id']
 
 interface Props {
   data: InterpretationData
@@ -15,12 +16,13 @@ interface Props {
 
 export function InterpretationView({ data }: Props) {
   const [tab, setTab] = useState<TabId>('short')
+  const tabs = BASE_TABS.filter((t) => t.id !== 'cards' || (data.positions && data.positions.length > 0))
 
   return (
     <div className="flex flex-col gap-4">
       {/* Tabs */}
       <div className="flex gap-1 bg-elevated rounded-xl p-1">
-        {TABS.map((t) => (
+        {tabs.map((t) => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
@@ -61,6 +63,20 @@ export function InterpretationView({ data }: Props) {
           <div className="h-px bg-border" />
           <Section label="Прямые карты" text={data.upright} />
           <Section label="Перевёрнутые карты" text={data.reversed} />
+        </div>
+      )}
+
+      {tab === 'cards' && data.positions && (
+        <div className="flex flex-col gap-3 animate-fade-in">
+          {data.positions.map((p, i) => (
+            <div key={i} className="bg-surface border border-border rounded-xl p-3 flex flex-col gap-1.5">
+              <div className="flex items-baseline justify-between gap-2">
+                <p className="text-slate-500 text-[10px] uppercase tracking-widest">{p.position}</p>
+                <p className="text-mystic-light text-[11px] font-medium shrink-0">{p.card}</p>
+              </div>
+              <p className="text-slate-300 text-sm leading-relaxed">{p.meaning}</p>
+            </div>
+          ))}
         </div>
       )}
 

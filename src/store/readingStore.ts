@@ -30,8 +30,8 @@ export const useReadingStore = create<ReadingStore>((set, get) => ({
   ...initialState,
 
   setQuestion: (question) => set({ question }),
-  selectSpread: (spread) => set({ spread }),
-  setDrawnCards: (drawnCards) => set({ drawnCards }),
+  selectSpread: (spread) => set({ spread, drawnCards: [], interpretation: '', error: null }),
+  setDrawnCards: (drawnCards) => set({ drawnCards, interpretation: '', error: null }),
 
   fetchInterpretation: async () => {
     const { question, spread, drawnCards } = get()
