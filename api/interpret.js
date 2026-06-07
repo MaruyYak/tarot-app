@@ -9,7 +9,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const cardKnowledge = require(join(__dirname, '..', 'src', 'data', 'cardKnowledge.json'))
 
 const FREE_LIMIT = 20
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const client = new OpenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+  baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+})
 
 function getDb() {
   return createClient({
@@ -58,7 +61,7 @@ export default async function handler(req, res) {
 
   try {
     const completion = await client.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gemini-2.0-flash',
       max_tokens: 1400,
       response_format: { type: 'json_object' },
       messages: [
