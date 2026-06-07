@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/Button'
@@ -14,25 +14,49 @@ export function DrawScreen() {
   // Pre-deal all cards at mount, reveal one by one
   const [dealt, setDealt] = useState<DrawnCard[]>([])
   const [revealedCount, setRevealedCount] = useState(0)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  // Ref keeps dealt fresh inside setInterval closure (avoids stale closure)
+  const dealtRef = useRef<DrawnCard[]>([])
 
   useEffect(() => {
     if (!spread) {
       navigate('/reading/spread', { replace: true })
       return
     }
-    setDealt(drawCards(spread))
+    const cards = drawCards(spread)
+    dealtRef.current = cards
+    setDealt(cards)
     setRevealedCount(0)
   }, [spread]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => () => { if (intervalRef.current) clearInterval(intervalRef.current) }, [])
+
   function revealNext() {
-    setRevealedCount((c) => Math.min(c + 1, dealt.length))
+    setRevealedCount((c) => Math.min(c + 1, dealtRef.current.length))
+  }
+
+  function revealAll() {
+    if (intervalRef.current) return
+    let count = revealedCount
+    const total = dealtRef.current.length
+    if (count >= total) return
+    intervalRef.current = setInterval(() => {
+      count++
+      setRevealedCount(count)
+      if (count >= total) {
+        clearInterval(intervalRef.current!)
+        intervalRef.current = null
+      }
+    }, 320)
   }
 
   const allRevealed = revealedCount === dealt.length && dealt.length > 0
   const remaining = dealt.length - revealedCount
 
   function handleGetInterpretation() {
-    setDrawnCards(dealt)
+    const cards = dealtRef.current
+    if (!cards.length) return
+    setDrawnCards(cards)
     navigate('/reading/result')
   }
 
@@ -55,6 +79,19 @@ export function DrawScreen() {
           <span className="text-slate-500 text-xs shrink-0">
             {revealedCount}/{dealt.length}
           </span>
+          {!allRevealed && dealt.length > 1 && (
+            <button
+              onClick={revealAll}
+              className="text-xs shrink-0 px-2 py-0.5 rounded-lg border transition-colors duration-200"
+              style={{
+                color: 'rgb(var(--color-gold))',
+                borderColor: 'rgba(var(--color-gold) / 0.35)',
+                background: 'rgba(var(--color-gold) / 0.07)',
+              }}
+            >
+              открыть все
+            </button>
+          )}
         </div>
 
         {/* Cards grid */}

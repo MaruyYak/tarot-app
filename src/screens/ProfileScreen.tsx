@@ -26,6 +26,12 @@ const THEMES: { id: AppTheme; label: string; description: string; swatches: stri
     description: 'Лесной, природный',
     swatches: ['#125846', '#082E28', '#c9a84c'],
   },
+  {
+    id: 'parchment',
+    label: 'Пергамент',
+    description: 'Светлый, золотой',
+    swatches: ['#9E6C20', '#F7EED9', '#D0A226'],
+  },
 ]
 
 function getUserId(): string {

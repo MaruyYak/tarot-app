@@ -151,11 +151,11 @@ function AllSeeingEye() {
       {/* Mid ring */}
       <circle cx={cx} cy={cy} r={16} stroke="currentColor" strokeWidth="0.4" opacity={0.18} />
 
-      {/* Eye shape (filled dark) */}
+      {/* Eye shape — transparent fill so card-back shows through */}
       <path
         d={`M ${cx - ew} ${cy} Q ${cx} ${cy - eh * 2.1} ${cx + ew} ${cy} Q ${cx} ${cy + eh * 2.1} ${cx - ew} ${cy}`}
-        fill="rgba(0,0,0,0.55)"
-        stroke="currentColor" strokeWidth="1.2" opacity={1}
+        fill="rgba(255,255,255,0.06)"
+        stroke="currentColor" strokeWidth="1.3" opacity={1}
       />
 
       {/* Upper lashes */}
@@ -167,32 +167,32 @@ function AllSeeingEye() {
           <line key={i}
             x1={cx + offset} y1={yOnLid}
             x2={cx + offset * 1.1} y2={yOnLid - len}
-            stroke="currentColor" strokeWidth="0.7" opacity={0.45}
+            stroke="currentColor" strokeWidth="0.7" opacity={0.6}
           />
         )
       })}
 
-      {/* Iris */}
-      <circle cx={cx} cy={cy} r={9} stroke="currentColor" strokeWidth="0.9" opacity={0.65} fill="rgba(0,0,0,0.4)" />
+      {/* Iris — golden ring */}
+      <circle cx={cx} cy={cy} r={9} stroke="currentColor" strokeWidth="1.1" opacity={0.85} fill="rgba(255,255,255,0.08)" />
 
-      {/* Iris lines */}
+      {/* Iris inner detail lines */}
       {[0, 60, 120, 180, 240, 300].map((deg) => {
         const a = deg * PI / 180
         return (
           <line key={deg}
             x1={cx + cos(a) * 4} y1={cy + sin(a) * 4}
             x2={cx + cos(a) * 8.5} y2={cy + sin(a) * 8.5}
-            stroke="currentColor" strokeWidth="0.5" opacity={0.3}
+            stroke="currentColor" strokeWidth="0.5" opacity={0.45}
           />
         )
       })}
 
-      {/* Pupil */}
-      <circle cx={cx} cy={cy} r={4} fill="rgba(0,0,0,0.85)" />
-      <circle cx={cx} cy={cy} r={3} stroke="currentColor" strokeWidth="0.4" opacity={0.35} fill="none" />
+      {/* Pupil — small golden dot */}
+      <circle cx={cx} cy={cy} r={3.5} fill="currentColor" opacity={0.55} />
+      <circle cx={cx} cy={cy} r={2}   fill="currentColor" opacity={0.9} />
 
       {/* Highlight */}
-      <circle cx={cx + 2} cy={cy - 2} r={1.2} fill="currentColor" opacity={0.75} />
+      <circle cx={cx + 2} cy={cy - 2} r={1.2} fill="rgba(255,255,255,0.85)" />
 
       {/* Bottom arch ornament */}
       <path d={`M ${cx - 15} ${cy + 20} Q ${cx} ${cy + 17} ${cx + 15} ${cy + 20}`}
@@ -225,8 +225,9 @@ export function TarotCardFan({ onClick }: { onClick: () => void }) {
         style={{
           width: '82px', height: '142px',
           transform: 'rotate(-18deg) translateX(-72px) translateY(22px)',
-          zIndex: 1, opacity: 0.82,
+          zIndex: 1, opacity: 0.85,
           transformOrigin: 'bottom center',
+          filter: 'drop-shadow(4px 8px 16px rgba(0,0,0,0.45)) drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
         }}
       >
         <CardShell><CompassRose /></CardShell>
@@ -238,20 +239,21 @@ export function TarotCardFan({ onClick }: { onClick: () => void }) {
         style={{
           width: '82px', height: '142px',
           transform: 'rotate(18deg) translateX(72px) translateY(22px)',
-          zIndex: 2, opacity: 0.82,
+          zIndex: 2, opacity: 0.85,
           transformOrigin: 'bottom center',
+          filter: 'drop-shadow(-4px 8px 16px rgba(0,0,0,0.45)) drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
         }}
       >
         <CardShell><CompassRose /></CardShell>
       </button>
 
-      {/* Center card — eye, front and glowing */}
+      {/* Center card — eye, front, glowing + shadow */}
       <button onClick={onClick} aria-label="Новый расклад"
         className="absolute transition-all duration-300 hover:scale-[1.04] active:scale-95"
         style={{
           width: '90px', height: '157px',
           zIndex: 10,
-          filter: 'drop-shadow(0 0 14px rgba(var(--color-gold) / 0.4)) drop-shadow(0 0 4px rgba(var(--color-gold) / 0.25))',
+          filter: 'drop-shadow(0 0 16px rgba(var(--color-gold) / 0.45)) drop-shadow(0 0 5px rgba(var(--color-gold) / 0.25)) drop-shadow(0 10px 20px rgba(0,0,0,0.55))',
         }}
       >
         <CardShell><AllSeeingEye /></CardShell>

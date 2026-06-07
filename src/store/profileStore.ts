@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { DeckId } from '@/data/decks'
 
-export type AppTheme = 'void' | 'nouveau' | 'emerald'
+export type AppTheme = 'void' | 'nouveau' | 'emerald' | 'parchment'
 
 interface ProfileStore {
   name: string
@@ -19,7 +19,7 @@ export const useProfileStore = create<ProfileStore>()(
     (set) => ({
       name: 'Странник',
       joinedAt: new Date().toISOString(),
-      theme: 'void',
+      theme: 'parchment',
       deckId: null,
       setName: (name) => set({ name }),
       setTheme: (theme) => set({ theme }),

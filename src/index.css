@@ -45,6 +45,46 @@
   --card-back-inner2-border: rgba(201, 168, 76, 0.15);
 }
 
+/* ── Theme: Parchment (light) ───────────────────────────────────── */
+[data-theme="parchment"] {
+  --color-void:         247 238 217;  /* #F7EED9 — parchment bg */
+  --color-surface:      238 224 194;  /* #EEE0C2 */
+  --color-elevated:     228 210 172;  /* #E4D2AC */
+  --color-border:       196 162 96;   /* #C4A260 */
+  --color-accent:       158 108 32;   /* #9E6C20 */
+  --color-accent-light: 192 140 52;   /* #C08C34 */
+  --color-accent-dark:  124 82 18;    /* #7C5212 */
+  --color-gold:         168 118 10;   /* #A8760A */
+  --color-gold-light:   208 162 38;   /* #D0A226 */
+  --color-gold-dark:    124 84 4;     /* #7C5404 */
+  --bg-app: radial-gradient(ellipse at 50% 0%, #E4D2AC 0%, #F7EED9 70%);
+  --card-back-bg: linear-gradient(135deg, #3E2408 0%, #6E4416 50%, #4E2E0A 100%);
+  --card-back-border: rgba(208, 162, 38, 0.65);
+  --card-back-symbol-color: rgba(208, 162, 38, 0.85);
+  --card-back-text-color: rgba(208, 162, 38, 0.6);
+  --card-back-inner-border: rgba(196, 162, 96, 0.5);
+  --card-back-inner2-border: rgba(208, 162, 38, 0.2);
+}
+
+/* Default text color for light theme */
+[data-theme="parchment"] { color: #30200E; }
+
+/* Text overrides — light bg needs dark text */
+[data-theme="parchment"] .text-white      { color: #241408; }
+[data-theme="parchment"] .text-slate-100  { color: #30200E; }
+[data-theme="parchment"] .text-slate-200  { color: #3E2C16; }
+[data-theme="parchment"] .text-slate-300  { color: #523C22; }
+[data-theme="parchment"] .text-slate-400  { color: #725030; }
+[data-theme="parchment"] .text-slate-500  { color: #946A46; }
+[data-theme="parchment"] .text-slate-600  { color: #B48A64; }
+
+/* Placeholder text on light bg */
+[data-theme="parchment"] input::placeholder,
+[data-theme="parchment"] textarea::placeholder { color: #946A46; opacity: 1; }
+
+/* Scrollbar */
+[data-theme="parchment"] ::-webkit-scrollbar-thumb { background: rgba(158, 108, 32, 0.3); }
+
 /* ── Theme: Nouveau ─────────────────────────────────────────────── */
 [data-theme="nouveau"] {
   --color-void:         15 11 14;
