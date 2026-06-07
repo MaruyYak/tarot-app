@@ -4,6 +4,6 @@ dist
 .env.local
 *.log
 books/
-*.png
-*.jpg
+screenshot-*.png
+ss-*.png
 screenshot-*.mjs
