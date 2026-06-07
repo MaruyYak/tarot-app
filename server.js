@@ -23,10 +23,7 @@ if (isProd) {
   app.use(express.static(join(__dirname, 'dist')))
 }
 
-const openai = new OpenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
-})
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 app.post('/api/interpret', async (req, res) => {
   const { question, spreadName, cards } = req.body
@@ -65,7 +62,7 @@ app.post('/api/interpret', async (req, res) => {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gemini-2.0-flash',
+      model: 'gpt-4o',
       max_tokens: 1400,
       response_format: { type: 'json_object' },
       messages: [
@@ -77,7 +74,7 @@ app.post('/api/interpret', async (req, res) => {
     const interpretation = JSON.parse(completion.choices[0]?.message?.content ?? '{}')
     res.json({ interpretation })
   } catch (err) {
-    console.error('AI API error:', err)
+    console.error('OpenAI API error:', err)
     res.status(500).json({ error: 'Не удалось получить трактовку. Проверьте API-ключ.' })
   }
 })
